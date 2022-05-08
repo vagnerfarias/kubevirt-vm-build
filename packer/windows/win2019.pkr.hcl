@@ -4,7 +4,7 @@ packer {
 
 source "qemu" "win2019" {
   qemu_binary           = "/usr/libexec/qemu-kvm"
-  iso_url               = "/iso/WindowsServer2019.iso"
+  iso_url               = "http://10.129.3.152/WindowsServer2019.iso"
   iso_checksum          = "md5:70fec2cb1d6759108820130c2b5496da"
   output_directory      = "output_dir"
   disk_size             = "50G"
