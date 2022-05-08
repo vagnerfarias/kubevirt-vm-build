@@ -22,6 +22,7 @@ source "qemu" "win2019" {
   winrm_username        = "builduser"
   winrm_password        = "r3dh4t1!"
   shutdown_command      = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer Shutdown\""
+  vnc_bind_address	= "0.0.0.0"
 }
 
 build {
