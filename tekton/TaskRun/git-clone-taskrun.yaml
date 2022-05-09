@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: git-clone-
+spec:
+  taskRef:
+    name: git-clone
+  params:
+    - name: url
+      value: https://github.com/vagnerfarias/kubevirt-vm-build.git
+    - name: revision
+      value: main
+  workspaces:
+    - name: output
+      persistentVolumeClaim:
+        claimName: output-image

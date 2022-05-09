@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: build-windows-image-run
+  namespace: vfarias-virtualization
+spec:
+  pipelineRef:
+    name: build-windows-image
+  workspaces:
+  - name: output
+  workspaces:
+  - name: output
+    volumeClaimTemplate:
+      spec:
+        storageClassName: trident
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: 22Gi

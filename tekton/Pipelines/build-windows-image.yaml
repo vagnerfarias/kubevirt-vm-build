@@ -1,0 +1,48 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-windows-image
+  namespace: vfarias-virtualization
+spec:
+  tasks:
+  - name: git-clone
+    params:
+    - name: url
+      value: https://github.com/vagnerfarias/kubevirt-vm-build.git
+    - name: revision
+      value: main
+    - name: submodules
+      value: "true"
+    - name: depth
+      value: "1"
+    - name: sslVerify
+      value: "true"
+    - name: deleteExisting
+      value: "true"
+    - name: verbose
+      value: "true"
+    - name: gitInitImage
+      value: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.29.0
+    - name: userHome
+      value: /tekton/home
+    taskRef:
+      kind: Task
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: output
+  - name: packer-build
+    params:
+    - name: packer_file_path
+      value: packer/windows/win2019.pkr.hcl
+    runAfter:
+    - git-clone
+    taskRef:
+      kind: Task
+      name: packer-build
+    workspaces:
+    - name: output
+      workspace: output
+  workspaces:
+  - name: output
+

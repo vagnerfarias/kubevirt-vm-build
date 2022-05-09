@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: packer-build
+spec:
+  params:
+    #- name: iso_url
+    #  type: string
+    #- name: iso_checksum
+    #  type: string
+    - name: packer_file_path
+      type: string
+  steps:
+    - name: build-image
+      image: quay.io/vfarias/centos-packer
+      resources:
+        requests:
+          memory: 4Gi
+          cpu: 2
+          devices.kubevirt.io/kvm: '1'
+        limits:
+          memory: 8Gi
+          cpu: 4
+          devices.kubevirt.io/kvm: '1'
+      env:
+        - name: PACKER_FILE_PATH
+          value: $(params.packer_file_path)
+        - name: WORKSPACE
+          value: $(workspaces.output.path)
+      script: |
+        #!/bin/sh
+        echo "HOME DIR: $HOME"
+        ls -l /dev/kvm
+        ls -l $(dirname ${WORKSPACE}/${PACKER_FILE_PATH})
+        cd $(dirname ${WORKSPACE}/${PACKER_FILE_PATH})
+        PACKER_LOG=1 /usr/bin/packer build ${WORKSPACE}/${PACKER_FILE_PATH}
+  workspaces:
+    - name: output
