@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: create-dv-
+spec:
+  taskRef:
+    name: create-dv-from-image
+  params:
+    - name: image_path
+      value: "packer/windows/output_dir/win2019-kvm.qcow2"
+    - name: virtctl_url
+      value: "https://hyperconverged-cluster-cli-download-openshift-cnv.apps.cnv.engineering.redhat.com/amd64/linux/virtctl.tar.gz"
+    - name: dv_name
+      value: "win2019-base-dv"
+    - name: dv_size
+      value: "50Gi"
+  workspaces:
+    - name: output
+      persistentVolumeClaim:
+        claimName: pvc-42ff4feba8

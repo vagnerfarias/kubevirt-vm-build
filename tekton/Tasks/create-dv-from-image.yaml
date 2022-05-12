@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-dv-from-image
+spec:
+  params:
+    - name: image_path
+      type: string
+    - name: virtctl_url
+      type: string
+    - name: dv_name
+      type: string
+    - name: dv_size
+      type: string
+  steps:
+    - name: create-dv
+      image: ubi8
+      resources:
+        requests:
+          memory: 256Mi
+          cpu: 100m
+        limits:
+          memory: 512Mi
+          cpu: 1
+      env:
+        - name: IMAGE_PATH
+          value: $(params.image_path)
+        - name: VIRTCTL_URL
+          value: $(params.virtctl_url)
+        - name: DV_NAME
+          value: $(params.dv_name)
+        - name: DV_SIZE
+          value: $(params.dv_size)
+        - name: WORKSPACE
+          value: $(workspaces.output.path)
+      script: |
+        #!/bin/sh
+        curl -k ${VIRTCTL_URL} -o /tmp/virtctl.tar.gz
+        tar xzvf /tmp/virtctl.tar.gz -C /tmp
+        /tmp/virtctl image-upload dv ${DV_NAME} --size=${DV_SIZE} --image-path=${WORKSPACE}/${IMAGE_PATH} --insecure
+  workspaces:
+    - name: output
