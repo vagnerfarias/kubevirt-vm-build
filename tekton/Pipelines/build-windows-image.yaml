@@ -33,8 +33,8 @@ spec:
       workspace: output
   - name: packer-build
     params:
-    - name: packer_file_path
-      value: packer/windows/win2019.pkr.hcl
+    - name: buildConfigMapName
+      value: win2k19-base
     runAfter:
     - git-clone
     taskRef:
@@ -46,7 +46,7 @@ spec:
   - name: create-dv
     params:
     - name: image_path
-      value: "packer/windows/output_dir/win2019-kvm.qcow2"
+      value: "win2k19-base/win2019-kvm.qcow2"
     - name: virtctl_url
       value: "https://hyperconverged-cluster-cli-download-openshift-cnv.apps.cnv.engineering.redhat.com/amd64/linux/virtctl.tar.gz"
     - name: dv_name

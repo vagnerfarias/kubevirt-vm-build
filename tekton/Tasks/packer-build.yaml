@@ -24,7 +24,6 @@ spec:
       script: |
         #!/bin/sh
         cd /buildconfig
-        ls -la /buildconfig
         PACKER_LOG=1 /usr/bin/packer build /buildconfig/build.pkr.hcl
       volumeMounts:
         - name: buildconfig

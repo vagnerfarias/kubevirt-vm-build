@@ -8,8 +8,6 @@ spec:
     name: build-windows-image
   workspaces:
   - name: output
-  workspaces:
-  - name: output
     volumeClaimTemplate:
       spec:
         storageClassName: trident
