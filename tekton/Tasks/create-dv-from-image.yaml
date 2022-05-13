@@ -37,6 +37,7 @@ spec:
         #!/bin/sh
         curl -k ${VIRTCTL_URL} -o /tmp/virtctl.tar.gz
         tar xzvf /tmp/virtctl.tar.gz -C /tmp
+        echo ${WORKSPACE}
         /tmp/virtctl image-upload dv ${DV_NAME} --size=${DV_SIZE} --image-path=${WORKSPACE}/${IMAGE_PATH} --insecure
   workspaces:
     - name: output

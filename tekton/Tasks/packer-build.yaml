@@ -23,8 +23,11 @@ spec:
           value: $(workspaces.output.path)
       script: |
         #!/bin/sh
+        echo ${WORKSPACE}
+        ls -al ${WORKSPACE}
         cd /buildconfig
         PACKER_LOG=1 /usr/bin/packer build /buildconfig/build.pkr.hcl
+        find ${WORKSPACE} -name \*.qcow2
       volumeMounts:
         - name: buildconfig
           mountPath: /buildconfig
