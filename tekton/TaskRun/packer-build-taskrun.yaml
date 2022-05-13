@@ -6,8 +6,8 @@ spec:
   taskRef:
     name: packer-build
   params:
-    - name: packer_file_path
-      value: packer/windows/win2019.pkr.hcl
+    - name: buildConfigMapName
+      value: win2k19-base
   workspaces:
     - name: output
       persistentVolumeClaim:
