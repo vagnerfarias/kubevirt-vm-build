@@ -56,9 +56,9 @@ metadata:
   name: iso-store
 spec:
   ports:
-  - port: 443
+  - port: 80
     protocol: TCP
-    targetPort: 8443
+    targetPort: 8080
   selector:
     app: iso-store
 
