@@ -21,6 +21,7 @@ source "qemu" "rhel8" {
   http_directory	= "http_files"
   headless		= "true"
   memory		= "2048"
+  insecure_connection	= "true"
 }
 
 build {
