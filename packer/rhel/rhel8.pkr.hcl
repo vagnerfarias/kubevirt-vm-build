@@ -3,16 +3,16 @@ packer {
 }
 
 source "qemu" "rhel8" {
-  iso_url 		= "/Users/vfarias/Downloads/rhel-8.5-x86_64-dvd.iso"
-  iso_checksum 		= "md5:9c70f1acea48377b01da8066764805f9"
-  output_directory 	= "output_dir"
+  iso_url 		= "https://iso-store/rhel-8.6-x86_64-dvd.iso"
+  iso_checksum 		= "sha256:c324f3b07283f9393168f0a4ad2167ebbf7e4699d65c9670e0d9e58ba4e2a9a8""
+  output_directory 	= "/workspace/output/rhel-8.6-base"
   disk_size		= "10G"
   format		= "qcow2"
-  accelerator		= "hvf"
+  accelerator		= "kvm"
   ssh_username		= "root"
   ssh_password		= "r3dh4t1!"
   ssh_timeout		= "20m"
-  vm_name		= "rhel8.2-kvm.qcow2"
+  vm_name		= "rhel8.6-kvm.qcow2"
   net_device		= "virtio-net"
   disk_interface	= "virtio"
   boot_wait		= "20s"
