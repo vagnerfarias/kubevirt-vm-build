@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
-  name: build-windows-image-run
+  generateName: build-windows-image-run-
   namespace: vfarias-virtualization
 spec:
   pipelineRef:

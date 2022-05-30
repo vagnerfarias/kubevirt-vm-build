@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: build-windows-image
+  name: build-rhel-image
   namespace: vfarias-virtualization
 spec:
   tasks:
@@ -34,7 +34,7 @@ spec:
   - name: packer-build
     params:
     - name: packer_build_path
-      value: packer/windows/win2019.pkr.hcl
+      value: packer/rhel/rhel8.pkr.hcl
     runAfter:
     - git-clone
     taskRef:
@@ -46,13 +46,13 @@ spec:
   - name: create-dv
     params:
     - name: image_path
-      value: "win2k19-base/win2019-kvm.qcow2"
+      value: "rhel-8.6-base/rhel8.6-kvm.qcow2"
     - name: virtctl_url
       value: "https://hyperconverged-cluster-cli-download-openshift-cnv.apps.cnv.engineering.redhat.com/amd64/linux/virtctl.tar.gz"
     - name: dv_name
-      value: "win2019-base-dv"
+      value: "rhel8.6-base-dv"
     - name: dv_size
-      value: "50Gi"
+      value: "10Gi"
     runAfter:
     - packer-build
     taskRef:

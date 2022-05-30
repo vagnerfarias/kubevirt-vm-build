@@ -11,4 +11,4 @@ spec:
   workspaces:
     - name: output
       persistentVolumeClaim:
-        claimName: output-image
+        claimName: pvc-2b32253e66
