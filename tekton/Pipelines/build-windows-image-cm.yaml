@@ -1,0 +1,66 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: build-windows-image
+  namespace: vfarias-virtualization
+spec:
+  tasks:
+  - name: git-clone
+    params:
+    - name: url
+      value: https://github.com/vagnerfarias/kubevirt-vm-build.git
+    - name: revision
+      value: main
+    - name: submodules
+      value: "true"
+    - name: depth
+      value: "1"
+    - name: sslVerify
+      value: "true"
+    - name: deleteExisting
+      value: "true"
+    - name: verbose
+      value: "true"
+    - name: gitInitImage
+      value: gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.29.0
+    - name: userHome
+      value: /tekton/home
+    taskRef:
+      kind: ClusterTask
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: output
+  - name: packer-build
+    params:
+    - name: buildConfigMapName
+      value: win2k19-base
+    runAfter:
+    - git-clone
+    taskRef:
+      kind: Task
+      name: packer-build
+    workspaces:
+    - name: output
+      workspace: output
+  - name: create-dv
+    params:
+    - name: image_path
+      value: "win2k19-base/win2019-kvm.qcow2"
+    - name: virtctl_url
+      value: "https://hyperconverged-cluster-cli-download-openshift-cnv.apps.cnv.engineering.redhat.com/amd64/linux/virtctl.tar.gz"
+    - name: dv_name
+      value: "win2019-base-dv"
+    - name: dv_size
+      value: "50Gi"
+    runAfter:
+    - packer-build
+    taskRef:
+      kind: Task
+      name: create-dv-from-image
+    workspaces:
+      - name: output
+        workspace: output
+  workspaces:
+  - name: output
+

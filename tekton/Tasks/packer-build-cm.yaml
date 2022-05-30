@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: packer-build
+spec:
+  params:
+    - name: buildConfigMapName
+      type: string
+  steps:
+    - name: build-image
+      image: quay.io/vfarias/centos-packer
+      resources:
+        requests:
+          memory: 4Gi
+          cpu: 2
+          devices.kubevirt.io/kvm: '1'
+        limits:
+          memory: 8Gi
+          cpu: 4
+          devices.kubevirt.io/kvm: '1'
+      env:
+        - name: WORKSPACE
+          value: $(workspaces.output.path)
+      script: |
+        #!/bin/sh
+        echo ${WORKSPACE}
+        ls -al ${WORKSPACE}
+        cd /buildconfig
+        PACKER_LOG=1 /usr/bin/packer build /buildconfig/build.pkr.hcl
+        find ${WORKSPACE} -name \*.qcow2
+      volumeMounts:
+        - name: buildconfig
+          mountPath: /buildconfig
+  workspaces:
+    - name: output
+  volumes:
+    - name: buildconfig
+      configMap:
+        name: "$(params.buildConfigMapName)"
